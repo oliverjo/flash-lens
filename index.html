@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="フラッシュ">
+  <title>フラッシュレンズ</title>
+  <link rel="manifest" href="manifest.json">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', sans-serif;
+      background: #fff;
+      color: #111;
+      min-height: 100vh;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 32px 24px;
+      gap: 32px;
+    }
+
+    h1 {
+      font-size: 16px;
+      font-weight: 600;
+      color: #111;
+      letter-spacing: 0.08em;
+    }
+
+    /* カード */
+    .card {
+      width: 100%;
+      max-width: 360px;
+      min-height: 220px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 36px 28px;
+      border: 2px solid #111;
+      border-radius: 16px;
+      gap: 20px;
+    }
+
+    .card.animate {
+      animation: appear 0.25s ease;
+    }
+
+    @keyframes appear {
+      from { opacity: 0.2; transform: scale(0.97); }
+      to   { opacity: 1;   transform: scale(1); }
+    }
+
+    .category-badge {
+      font-size: 14px;
+      font-weight: 700;
+      color: #111;
+      background: #f0f0f0;
+      padding: 4px 14px;
+      border-radius: 20px;
+      letter-spacing: 0.05em;
+    }
+
+    .lens-text {
+      font-size: 20px;
+      font-weight: 500;
+      line-height: 1.7;
+      color: #111;
+    }
+
+    .duration-text {
+      font-size: 15px;
+      color: #111;
+    }
+
+    .placeholder-text {
+      font-size: 18px;
+      color: #111;
+      line-height: 1.6;
+    }
+
+    /* ボタン */
+    .draw-btn {
+      width: 100%;
+      max-width: 360px;
+      padding: 22px;
+      font-size: 18px;
+      font-weight: 700;
+      color: #fff;
+      background: #111;
+      border: none;
+      border-radius: 14px;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      transition: opacity 0.1s;
+      letter-spacing: 0.05em;
+    }
+
+    .draw-btn:active {
+      opacity: 0.75;
+    }
+
+    /* カウンター */
+    .counter {
+      font-size: 14px;
+      color: #111;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🎲 フラッシュレンズ</h1>
+
+  <div class="card" id="card">
+    <p class="placeholder-text">ボタンを押して<br>お題を引く</p>
+  </div>
+
+  <button class="draw-btn" id="drawBtn" onclick="drawLens()">次のお題</button>
+
+  <p class="counter" id="counter"></p>
+
+  <script src="lenses.js"></script>
+  <script>
+    let drawCount = 0;
+    let lastIndex = -1;
+
+    function drawLens() {
+      if (!Array.isArray(LENSES) || LENSES.length === 0) {
+        alert('レンズデータが読み込まれていません');
+        return;
+      }
+
+      // 直前と同じお題が連続しないようにする
+      let idx;
+      do {
+        idx = Math.floor(Math.random() * LENSES.length);
+      } while (idx === lastIndex && LENSES.length > 1);
+      lastIndex = idx;
+
+      const lens = LENSES[idx];
+      drawCount++;
+
+      const card = document.getElementById('card');
+      card.innerHTML = `
+        <span class="category-badge">${lens.category}</span>
+        <p class="lens-text">${lens.text}</p>
+        <p class="duration-text">${lens.duration}</p>
+      `;
+
+      // アニメーション再起動
+      card.classList.remove('animate');
+      void card.offsetWidth;
+      card.classList.add('animate');
+
+      // カウンター更新
+      document.getElementById('counter').textContent = `${drawCount}回目`;
+    }
+  </script>
+
+</body>
+</html>

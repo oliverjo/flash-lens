@@ -125,7 +125,7 @@
     <p class="placeholder-text">ボタンを押して<br>お題を引く</p>
   </div>
 
-  <button class="draw-btn" id="drawBtn" onclick="drawLens()">次のお題</button>
+  <button class="draw-btn" id="drawBtn">次のお題</button>
 
   <p class="counter" id="counter"></p>
 
@@ -135,7 +135,7 @@
     let lastIndex = -1;
 
     function drawLens() {
-      if (!Array.isArray(LENSES) || LENSES.length === 0) {
+      if (typeof LENSES === 'undefined' || !Array.isArray(LENSES) || LENSES.length === 0) {
         alert('レンズデータが読み込まれていません');
         return;
       }
@@ -148,14 +148,27 @@
       lastIndex = idx;
 
       const lens = LENSES[idx];
+      if (!lens || !lens.text || !lens.category || !lens.duration) {
+        console.warn('Invalid lens entry at index', idx);
+        return;
+      }
+
       drawCount++;
 
       const card = document.getElementById('card');
-      card.innerHTML = `
-        <span class="category-badge">${lens.category}</span>
-        <p class="lens-text">${lens.text}</p>
-        <p class="duration-text">${lens.duration}</p>
-      `;
+      const badge = document.createElement('span');
+      badge.className = 'category-badge';
+      badge.textContent = lens.category;
+
+      const lensP = document.createElement('p');
+      lensP.className = 'lens-text';
+      lensP.textContent = lens.text;
+
+      const durP = document.createElement('p');
+      durP.className = 'duration-text';
+      durP.textContent = lens.duration;
+
+      card.replaceChildren(badge, lensP, durP);
 
       // アニメーション再起動
       card.classList.remove('animate');
@@ -165,6 +178,8 @@
       // カウンター更新
       document.getElementById('counter').textContent = `${drawCount}回目`;
     }
+
+    document.getElementById('drawBtn').addEventListener('click', drawLens);
   </script>
 
 </body>

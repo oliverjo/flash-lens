@@ -401,4 +401,131 @@ const LENSES = [
     text: '今この場で一番硬いものに触れてみる。',
     duration: '5秒',
   },
+
+  // ── なりきりレンズ ──
+  {
+    category: 'なりきり',
+    text: 'お昼ごはん前に迷子になった子犬になる。',
+    duration: '10秒',
+  },
+  {
+    category: 'なりきり',
+    text: '宇宙空間をさまよい続ける鉄原子になる。',
+    duration: '15秒',
+  },
+  {
+    category: 'なりきり',
+    text: '地球最後の1匹のアリになる。',
+    duration: '10秒',
+  },
+  {
+    category: 'なりきり',
+    text: '誰かのポケットの中で40年眠っているコインになる。',
+    duration: '10秒',
+  },
+  {
+    category: 'なりきり',
+    text: '羽化する直前の蝶になる。',
+    duration: '10秒',
+  },
+  {
+    category: 'なりきり',
+    text: '群れからはぐれた渡り鳥になる。',
+    duration: '10秒',
+  },
+  {
+    category: 'なりきり',
+    text: '燃え尽きる直前のろうそくになる。',
+    duration: '10秒',
+  },
+  {
+    category: 'なりきり',
+    text: '捨てられた靴の片方になる。',
+    duration: '10秒',
+  },
+  {
+    category: 'なりきり',
+    text: '舗装の割れ目から生えた草になる。',
+    duration: '10秒',
+  },
+  {
+    category: 'なりきり',
+    text: '嵐の目になる。',
+    duration: '15秒',
+  },
+  {
+    category: 'なりきり',
+    text: '届かなかった手紙になる。',
+    duration: '10秒',
+  },
+  {
+    category: 'なりきり',
+    text: '深海で光を出し続けているイカになる。',
+    duration: '10秒',
+  },
+  {
+    category: 'なりきり',
+    text: '誰も渡らないままになっている橋になる。',
+    duration: '15秒',
+  },
+  {
+    category: 'なりきり',
+    text: '満潮の直前の海になる。',
+    duration: '15秒',
+  },
+  {
+    category: 'なりきり',
+    text: '切られた直後の木になる。',
+    duration: '10秒',
+  },
+  {
+    category: 'なりきり',
+    text: '億年眠っている地層の中の石になる。',
+    duration: '15秒',
+  },
+  {
+    category: 'なりきり',
+    text: '試合開始の笛が吹かれる直前の空気になる。',
+    duration: '10秒',
+  },
+  {
+    category: 'なりきり',
+    text: '誰かが去った後の部屋の沈黙になる。',
+    duration: '15秒',
+  },
+  {
+    category: 'なりきり',
+    text: '100回使われた包丁になる。',
+    duration: '10秒',
+  },
+  {
+    category: 'なりきり',
+    text: '夜明け前の暗がりになる。',
+    duration: '15秒',
+  },
+  {
+    category: 'なりきり',
+    text: '踏まれても踏まれても生えてくる雑草になる。',
+    duration: '10秒',
+  },
+  {
+    category: 'なりきり',
+    text: '初めて海を見た猫になる。',
+    duration: '10秒',
+  },
+  {
+    category: 'なりきり',
+    text: '雪解けの最初の一滴になる。',
+    duration: '10秒',
+  },
+  {
+    category: 'なりきり',
+    text: '眠れない犬になる。',
+    duration: '10秒',
+  },
+  {
+    category: 'なりきり',
+    text: '電話が鳴り出す直前の静寂になる。',
+    duration: '10秒',
+  },
 ];

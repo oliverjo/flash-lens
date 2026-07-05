@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="フラッシュ">
+  <title>フラッシュレンズ</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', sans-serif;
+      background: #fff;
+      color: #111;
+      min-height: 100vh;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 32px 24px;
+      gap: 32px;
+    }
+
+    h1 {
+      font-size: 16px;
+      font-weight: 600;
+      color: #111;
+      letter-spacing: 0.08em;
+    }
+
+    /* カード */
+    .card {
+      width: 100%;
+      max-width: 360px;
+      min-height: 220px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 36px 28px;
+      border: 2px solid #111;
+      border-radius: 16px;
+      gap: 20px;
+    }
+
+    .card.animate {
+      animation: appear 0.25s ease;
+    }
+
+    @keyframes appear {
+      from { opacity: 0.2; transform: scale(0.97); }
+      to   { opacity: 1;   transform: scale(1); }
+    }
+
+    .category-badge {
+      font-size: 14px;
+      font-weight: 700;
+      color: #111;
+      background: #f0f0f0;
+      padding: 4px 14px;
+      border-radius: 20px;
+      letter-spacing: 0.05em;
+    }
+
+    .lens-text {
+      font-size: 20px;
+      font-weight: 500;
+      line-height: 1.7;
+      color: #111;
+    }
+
+    .duration-text {
+      font-size: 15px;
+      color: #111;
+    }
+
+    .placeholder-text {
+      font-size: 18px;
+      color: #111;
+      line-height: 1.6;
+    }
+
+    /* ボタン */
+    .draw-btn {
+      width: 100%;
+      max-width: 360px;
+      padding: 22px;
+      font-size: 18px;
+      font-weight: 700;
+      color: #fff;
+      background: #111;
+      border: none;
+      border-radius: 14px;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      transition: opacity 0.1s;
+      letter-spacing: 0.05em;
+    }
+
+    .draw-btn:active {
+      opacity: 0.75;
+    }
+
+    /* カウンター */
+    .counter {
+      font-size: 14px;
+      color: #111;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🎲 フラッシュレンズ</h1>
+
+  <div class="card" id="card">
+    <p class="placeholder-text">ボタンを押して<br>お題を引く</p>
+  </div>
+
+  <button class="draw-btn" id="drawBtn">次のお題</button>
+
+  <p class="counter" id="counter"></p>
+
+  <script>
+    // フラッシュレンズ データ
+    // カテゴリ：視点 / 注意 / 発想
+    // 追加・編集は自由。text は体言止め不可、動詞文で終わること。
+
+    const LENSES = [
+      // ── 視点レンズ（誰の目から見るか）──
+      {
+        category: '視点',
+        text: '今の自分を相手の目から見る。どう見えているか、3秒だけ確かめる。',
+        duration: '3秒',
+      },
+      {
+        category: '視点',
+        text: '頭上3mにカメラがある。今このフレームに何が映っているか。',
+        duration: '10秒',
+      },
+      {
+        category: '視点',
+        text: '今この場面を客席から見ている人は何を感じているか。',
+        duration: '5秒',
+      },
+      {
+        category: '視点',
+        text: 'この場に無関係な人間が通りかかったら、何を見るか。',
+        duration: '5秒',
+      },
+      // ── 注意レンズ（何に注意を向けるか）──
+      {
+        category: '注意',
+        text: '相手の呼吸の速さ・深さ・タイミングだけを追う。',
+        duration: '15秒',
+      },
+      {
+        category: '注意',
+        text: '相手の体の重さと、どこに力が入っているかを感じる。',
+        duration: '10秒',
+      },
+      {
+        category: '注意',
+        text: '今の物理的距離を感じる。近すぎるか、遠すぎるか。',
+        duration: '5秒',
+      },
+      {
+        category: '注意',
+        text: '言葉の意味を切り離し、音とリズムだけを聞く。',
+        duration: '15秒',
+      },
+      {
+        category: '注意',
+        text: '相手の目がどこを向いているか、どう動くかだけを見る。',
+        duration: '10秒',
+      },
+      // ── 発想レンズ（どのフレームで解釈するか）──
+      {
+        category: '発想',
+        text: 'この状況の真逆は何か。',
+        duration: '5秒',
+      },
+      {
+        category: '発想',
+        text: 'この人・この場は何の動物か。',
+        duration: '5秒',
+      },
+      {
+        category: '発想',
+        text: 'この状況のエロチックな側面はどこにあるか。',
+        duration: '5秒',
+      },
+      {
+        category: '発想',
+        text: '今この場面を15秒のCMにするとしたら、何を切り取るか。',
+        duration: '5秒',
+      },
+      {
+        category: '発想',
+        text: '自分が悪役だったらどう動くか。',
+        duration: '5秒',
+      },
+      {
+        category: '発想',
+        text: 'これをホラーで言うと。コメディで言うと。時代劇で言うと。',
+        duration: '5秒',
+      },
+    ];
+
+    let drawCount = 0;
+    let lastIndex = -1;
+
+    function drawLens() {
+      let idx;
+      do {
+        idx = Math.floor(Math.random() * LENSES.length);
+      } while (idx === lastIndex && LENSES.length > 1);
+      lastIndex = idx;
+
+      const lens = LENSES[idx];
+      drawCount++;
+
+      const card = document.getElementById('card');
+      const badge = document.createElement('span');
+      badge.className = 'category-badge';
+      badge.textContent = lens.category;
+
+      const lensP = document.createElement('p');
+      lensP.className = 'lens-text';
+      lensP.textContent = lens.text;
+
+      const durP = document.createElement('p');
+      durP.className = 'duration-text';
+      durP.textContent = lens.duration;
+
+      card.replaceChildren(badge, lensP, durP);
+
+      // アニメーション再起動
+      card.classList.remove('animate');
+      void card.offsetWidth;
+      card.classList.add('animate');
+
+      // カウンター更新
+      document.getElementById('counter').textContent = `${drawCount}回目`;
+    }
+
+    document.getElementById('drawBtn').addEventListener('click', drawLens);
+  </script>
+
+</body>
+</html>
